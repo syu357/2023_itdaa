@@ -69,10 +69,10 @@ public class RoadAddrApiController {
             if (searchBldgNumber != null) {
 
                 // 건물번호가 본번 형태인지 부번 형태인지 '-' 을 기준으로 확인해야 합니다.
-                String[] bldgNumberArray =
+                String[] bldgNumberArray = 
 
                 // 건물번호가 본번만 입력된 형태라면 (예 : 흑석로 84)
-                if (bldgNumberArray.length == ) {
+                if (bldgNumberArray.length == 1) {
 
                     // 건물번호가 문자로 되어 있으므로 숫자로 바꿔야 합니다. (DB는 숫자컬럼으로 되어 있음)
                     buildingMainNumber = Integer.parseInt();
@@ -89,7 +89,7 @@ public class RoadAddrApiController {
                     buildingSubNumber = Integer.parseInt(bldgNumberArray[1]);
 
                     // 도로명 검색어를 = 로 하여 건물본번, 건물부번 모두가 일치하는 도로명 주소를 찾습니다.
-                    searchResultList = roadAddrRepository.;
+                    searchResultList = roadAddrRepository.findByRoadNameAndBldgMainNoAndBldgSubNo(searchRoadAddress, buildingMainNumber, buildingSubNumber);
                 }
             }
             // searchBldgNumber null 이면 도로명 검색어만 입력된 것입니다.
@@ -100,7 +100,7 @@ public class RoadAddrApiController {
 
             }
 
-            searchResultListSize = searchResultList; // 최종적으로 DB에서 도로명 주소를 찾은 결과의 갯수
+            searchResultListSize = searchResultList.size(); // 최종적으로 DB에서 도로명 주소를 찾은 결과의 갯수
 
             // 도로명 주소가 검색된 결과가 없다면.
             if (searchResultListSize == 0) {
@@ -112,6 +112,7 @@ public class RoadAddrApiController {
             returnMap.put(resCnt, searchResultListSize); // return 건수정보는 조회 결과의 건수를 넣습니다.
 
         }
+        
         // 실행중 예외가 발생할 경우
         catch (Exception e) {
 

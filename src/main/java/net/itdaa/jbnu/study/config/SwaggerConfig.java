@@ -1,8 +1,4 @@
-<<<<<<<< Updated upstream:src/main/java/net/itdaa/backend/study/config/SwaggerConfig.java
-package net.itdaa.backend.study.config;
-========
 package net.itdaa.jbnu.study.config;
->>>>>>>> Stashed changes:src/main/java/net/itdaa/jbnu/study/config/SwaggerConfig.java
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
