@@ -69,13 +69,22 @@ public class RoadAddrApiController {
             if (searchBldgNumber != null) {
 
                 // 건물번호가 본번 형태인지 부번 형태인지 '-' 을 기준으로 확인해야 합니다.
-                String[] bldgNumberArray = 
+                String[] bldgNumberArray = new String[2];
+
+                if (searchBldgNumber.contains("-") == true) { // searchBldgNumber에 -이 포함되어 있으면
+                	int idx = searchBldgNumber.indexOf("-"); // - 를 기준으로 파싱
+                	bldgNumberArray[0] = searchBldgNumber.substring(0, idx); // bldgNumberArray[0]에 본번 저장
+                	bldgNumberArray[1] = searchBldgNumber.substring(idx+1); // bldgNumberArray[1]에 부번 저장
+                }
+                else { // // searchBldgNumber에 -이 포함되어 있지 않으면
+                	bldgNumberArray[0] = searchBldgNumber; // 건물 본번 저장
+                }
 
                 // 건물번호가 본번만 입력된 형태라면 (예 : 흑석로 84)
                 if (bldgNumberArray.length == 1) {
 
                     // 건물번호가 문자로 되어 있으므로 숫자로 바꿔야 합니다. (DB는 숫자컬럼으로 되어 있음)
-                    buildingMainNumber = Integer.parseInt();
+                    buildingMainNumber = Integer.parseInt(bldgNumberArray[0]);
 
                     // 도로명 검색어를 Like 로 하여 건물번호가 일치하는 도로명 주소를 찾습니다.
                     searchResultList = roadAddrRepository.findByRoadNameStartingWithAndBldgMainNo(searchRoadAddress, buildingMainNumber);
@@ -106,7 +115,7 @@ public class RoadAddrApiController {
             if (searchResultListSize == 0) {
                 resultStatus = HttpStatus.NOT_FOUND; // HTTP Status 코드는 NOT_FOUND 로 합니다. (404)
             }
-
+ 
             returnMap.put(resMsg, "정상처리되었습니다.");    // return 메세지는 "정상" 으로 하고
             returnMap.put(resRoadAddr, searchResultList);  // return 주소정보는 조회 결과를 넣습니다.
             returnMap.put(resCnt, searchResultListSize); // return 건수정보는 조회 결과의 건수를 넣습니다.
